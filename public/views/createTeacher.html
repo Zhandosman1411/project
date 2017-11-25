@@ -1,0 +1,24 @@
+<div class="teacher">
+	<div>
+		<h3>Добавить накопитель</h3>
+	</div>
+	<div>
+		<div>Введите название</div>
+		<input class="input2" type="text" ng-model="teacher.name" placeholder="Name">
+	</div>
+	<div>
+		<div>Введите версию</div>
+		<input class="input2" type="text" ng-model="teacher.surname" placeholder="Version">
+	</div>
+	<div>
+		<div>Введите цену</div>
+		<input class="input2" type="text" ng-model="teacher.cource" placeholder="Price">
+	</div>
+	<div>
+		<div>Выберите конфигуратор</div>
+		<div ng-repeat="group in groups" ng-click="pickGroup(group)">{{group.name}}</div>
+	</div>
+	<div>
+		<button class="but1" ng-click="CreateTeacher()">Add nakopitel</button>
+	</div>
+</div>

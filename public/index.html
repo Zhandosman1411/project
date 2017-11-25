@@ -1,0 +1,166 @@
+<html>
+<head>
+<!-- 
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet"> -->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script src="/bower_components/angular/angular.min.js"></script>
+<script src="/bower_components/angular-route/angular-route.js"></script>
+<script src="/bower_components/angular-local-storage.js"></script>
+<script type="text/javascript">
+	var app = angular
+		.module("Example",['ngRoute', 'LocalStorageModule'])
+			.config(function($routeProvider){
+        		$routeProvider
+	            .when("/CreateGroup", {
+	                templateUrl : "views/CreateGroup.html",
+	                controller : "createGroupController"
+	            })
+                .when("/CreateStudent", {
+                    templateUrl : "views/CreateStudent.html",
+                    controller : "CreateStudentController"
+                })
+                .when("/CreateTeacher", {
+                    templateUrl : "views/CreateTeacher.html",
+                    controller : "CreateTeacherController"
+                })
+                .when("/CreateComp", {
+                    templateUrl : "views/sobrat.html"
+                    // controller : "CreateTeacherController"
+                })
+                .when("/group", {
+                    templateUrl : "views/group.html",
+                    controller : "groupController"
+                })
+    		})
+    		.config(function (localStorageServiceProvider) {
+    			localStorageServiceProvider
+    				.setPrefix('Test')
+    				.setStorageType('sessionStorage')
+    				.setNotify(true, true)
+    		})
+    		.controller("mainController", function($scope, $location, localStorageService) {
+                $scope.groupInfo;
+    			$scope.goTo = function(url) {
+    				$location.path(url);
+    			}
+                $scope.goToGroup = function(url, group) {
+                    $location.path(url);
+                    $scope.groupInfo = group;
+                }
+                if (localStorageService.get("message") != null) {
+                    $scope.groups = localStorageService.get("message");
+                } else {
+                    $scope.groups = [];
+                    localStorageService.set("message", $scope.groups)
+                }
+    		})
+            .controller("createGroupController", function($scope, localStorageService) {
+                var self = $scope;
+                var groups = localStorageService.get("message");
+                function GroupClass(name, code, teacher, students)
+                {
+                    this.name = name;
+                    this.code = code;
+                    this.teacher = teacher;
+                    this.students = students;
+                }
+                self.CreateGroup = function() {
+                    var group = new GroupClass(self.group.name, self.group.code, "", []);
+                    groups.push(group);
+                    localStorageService.set("message", groups);
+                    //console.log(localStorageService.get("message"))
+                }
+            })
+            .controller("CreateStudentController", function($scope, localStorageService) {
+                var self = $scope;
+                var group;
+                var groups = localStorageService.get("message");
+                function StudentClass(name, surname, GPA, cource)
+                {
+                    this.name = name;
+                    this.surname = surname;
+                    this.GPA = GPA;
+                    this.cource = cource;
+
+                    this.GetGPA = function()
+                    {
+                        return this.GPA;
+                    }
+                    this.GetCource = function()
+                    {
+                        return this.cource;
+                    }
+                }
+                self.pickGroup = function(pGroup) {
+                    group = pGroup;
+                    console.log(group);
+                }
+                self.CreateStudent = function() {
+                    var student = new StudentClass(self.student.name, self.student.surname, self.student.GPA, self.student.cource);
+                    for (var i = 0; i < groups.length; i++) {
+                        if (groups[i].name == group.name) {
+                            group.students.push(student);
+                            groups[i] = group;
+                            localStorageService.set("message", groups);
+                            //console.log(localStorageService.get("message"))
+                        }
+                    }
+                }
+            })
+            .controller("CreateTeacherController", function($scope, localStorageService) {
+                var self = $scope;
+                var group;
+                var groups = localStorageService.get("message");
+                function TeacherClass(name, surname, cource)
+                {
+                    this.name = name;
+                    this.surname = surname;
+                    this.cource = cource;
+                }
+                    this.GetCource = function()
+                    {
+                        return this.cource;
+                    }
+                self.pickGroup = function(pGroup) {
+                    group = pGroup;
+                    console.log(group);
+                }
+                self.CreateTeacher = function() {
+                    var teacher = new TeacherClass(self.teacher.name, self.teacher.surname);
+                    for (var i = 0; i < groups.length; i++) {
+                        if (groups[i].name == group.name) {
+                            group.teacher = teacher;
+                            groups[i] = group;
+                            localStorageService.set("message", groups);
+                            //console.log(localStorageService.get("message"))
+                        }
+                    }
+                }
+            })
+            .controller("groupController", function($scope) {
+                var self = $scope;
+                self.students = self.groupInfo.students;
+                self.teacher = self.groupInfo.teacher;
+            })
+</script>
+</head>
+<body ng-app="Example">
+	<div ng-controller="mainController">
+        <button ng-click="goTo('')">Главная</button>
+        <button ng-click="goTo('/CreateGroup')">Добавить платформу</button>
+        <button ng-click="goTo('/CreateStudent')">Добавить данные</button>
+        <button ng-click="goTo('/CreateTeacher')">Добавить накопитель</button>
+        <button ng-click="goTo('/CreateComp')">Собрать компьютер</button>
+		<div ng-repeat="group in groups" ng-click="goToGroup('/group', group)">{{group.name}}</div>
+        
+		<div ng-view>
+
+		</div>
+	</div>
+</body>
+</html>

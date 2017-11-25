@@ -1,0 +1,16 @@
+<div>
+	<div class="group">
+		<h3>Название платформы: {{groupInfo.name}}</h3>
+	</div>
+	<div class="student">
+		<div>
+			<h3>Dannie list:</h3>
+		</div>
+		<div ng-repeat="student in students">
+			<h3>{{student.name}} {{student.surname}} {{student.GPA}} {{student.cource}}</h3>
+		</div>
+	</div>
+	<div class="teacher">
+		<h3>Накопитель: {{teacher.name}} {{teacher.surname}} {{teacher.cource}}</h3>
+	</div>
+</div>

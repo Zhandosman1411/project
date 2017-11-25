@@ -1,0 +1,28 @@
+<div class="student">
+	<div>
+		<h3>Добавить данные</h3>
+	</div>
+	<div>
+		<div>Введите название платформы</div>
+		<input class="input1" type="text" ng-model="student.name" placeholder="Name">
+	</div>
+	<div>
+		<div>Введите модель</div>
+		<input class="input1" type="text" ng-model="student.surname" placeholder="Model">
+	</div>
+	<div>
+		<div>Введите версию</div>
+		<input class="input1" type="text" ng-model="student.GPA" placeholder="Version">
+	</div>
+	<div>
+		<div>Введите цену</div>
+		<input class="input1" type="text" ng-model="student.cource" placeholder="Price">
+	</div>
+	<div>
+		<div>Выберите конфигуратор</div>
+		<div class="div1" ng-repeat="group in groups" ng-click="pickGroup(group)">{{group.name}}</div>
+	</div>
+	<div>
+		<button class="but1 tenpx" ng-click="CreateStudent()">Add student</button>
+	</div>
+</div>
